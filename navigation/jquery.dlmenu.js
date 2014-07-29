@@ -4,7 +4,7 @@
  *
  * Licensed under the MIT license.
  * http://www.opensource.org/licenses/mit-license.php
- *
+ * 
  * Copyright 2013, Codrops
  * http://www.codrops.com
  */
@@ -17,7 +17,13 @@
 
 	$.DLMenu = function( options, element ) {
 		this.$el = $( element );
-		this._init( options );
+		this._init(options);
+		$('.dl-droplink').click(function () {
+		    if ($(window).width() > 767) {
+		        var href = $(this).attr('href');
+		        window.location = href;
+		    }
+		});
 	};
 
 	// the options
@@ -29,13 +35,7 @@
 		onLevelClick : function( el, name ) { return false; },
 		// callback: click a link that does not have a sub menu
 		// el is the link element (li); ev is the event obj
-		onLinkClick : function( el, ev ) { return false; },
-		backLabel: 'Back',
-		// Change to "true" to use the active item as back link label.
-		useActiveItemAsBackLabel: false,
-		// Change to "true" to add a navigable link to the active item to its child
-		// menu.
-		useActiveItemAsLink: false
+		onLinkClick : function( el, ev ) { return false; }
 	};
 
 	$.DLMenu.prototype = {
@@ -45,7 +45,7 @@
 			this.options = $.extend( true, {}, $.DLMenu.defaults, options );
 			// cache some elements and initialize some variables
 			this._config();
-
+			
 			var animEndEventNames = {
 					'WebkitAnimation' : 'webkitAnimationEnd',
 					'OAnimation' : 'oAnimationEnd',
@@ -62,9 +62,9 @@
 			// animation end event name
 			this.animEndEventName = animEndEventNames[ Modernizr.prefixed( 'animation' ) ] + '.dlmenu';
 			// transition end event name
-			this.transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ] + '.dlmenu';
+			this.transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ] + '.dlmenu',
 			// support for css animations and css transitions
-			this.supportAnimations = Modernizr.cssanimations;
+			this.supportAnimations = Modernizr.cssanimations,
 			this.supportTransitions = Modernizr.csstransitions;
 
 			this._initEvents();
@@ -75,57 +75,33 @@
 			this.$trigger = this.$el.children( '.dl-trigger' );
 			this.$menu = this.$el.children( 'ul.dl-menu' );
 			this.$menuitems = this.$menu.find( 'li:not(.dl-back)' );
-			this.$el.find( 'ul.dl-submenu' ).prepend( '<li class="dl-back"><a href="#">' + this.options.backLabel + '</a></li>' );
+			this.$el.find( 'ul.dl-submenu' ).prepend( '<li class="dl-back"><a href="#">back</a></li>' );
 			this.$back = this.$menu.find( 'li.dl-back' );
-
-			// Set the label text for the back link.
-			if (this.options.useActiveItemAsBackLabel) {
-				this.$back.each(function() {
-					var $this = $(this),
-						parentLabel = $this.parents('li:first').find('a:first').text();
-
-					$this.find('a').html(parentLabel);
-				});
-			}
-			// If the active item should also be a clickable link, create one and put
-			// it at the top of our menu.
-			if (this.options.useActiveItemAsLink) {
-				this.$el.find( 'ul.dl-submenu' ).prepend(function() {
-					var parentli = $(this).parents('li:not(.dl-back):first').find('a:first');
-					return '<li class="dl-parent"><a href="' + parentli.attr('href') + '">' + parentli.text() + '</a></li>';
-				});
-			}
-
 		},
 		_initEvents : function() {
 
 			var self = this;
 
 			this.$trigger.on( 'click.dlmenu', function() {
+				
 				if( self.open ) {
 					self._closeMenu();
-				}
+				} 
 				else {
 					self._openMenu();
-					// clicking somewhere else makes the menu close
-					$body.off( 'click' ).children().on( 'click.dlmenu', function() {
-						self._closeMenu() ;
-					} );
-					
 				}
 				return false;
+
 			} );
 
 			this.$menuitems.on( 'click.dlmenu', function( event ) {
-
+				
 				event.stopPropagation();
 
 				var $item = $(this),
 					$submenu = $item.children( 'ul.dl-submenu' );
 
-				// Only go to the next menu level if one exists AND the link isn't the
-				// one we added specifically for navigating to parent item pages.
-				if( ($submenu.length > 0) && !($(event.currentTarget).hasClass('dl-subviewopen'))) {
+				if( $submenu.length > 0 ) {
 
 					var $flyin = $submenu.clone().css( 'opacity', 0 ).insertAfter( self.$menu ),
 						onAnimationEndFn = function() {
@@ -157,7 +133,7 @@
 			} );
 
 			this.$back.on( 'click.dlmenu', function( event ) {
-
+				
 				var $this = $( this ),
 					$submenu = $this.parents( 'ul.dl-submenu:first' ),
 					$item = $submenu.parent(),
@@ -180,7 +156,7 @@
 					}
 
 					$item.removeClass( 'dl-subviewopen' );
-
+					
 					var $subview = $this.parents( '.dl-subview:first' );
 					if( $subview.is( 'li' ) ) {
 						$subview.addClass( 'dl-subviewopen' );
@@ -191,7 +167,7 @@
 				return false;
 
 			} );
-
+			
 		},
 		closeMenu : function() {
 			if( this.open ) {
@@ -204,11 +180,11 @@
 					self.$menu.off( self.transEndEventName );
 					self._resetMenu();
 				};
-
+			
 			this.$menu.removeClass( 'dl-menuopen' );
 			this.$menu.addClass( 'dl-menu-toggle' );
 			this.$trigger.removeClass( 'dl-active' );
-
+			
 			if( this.supportTransitions ) {
 				this.$menu.on( this.transEndEventName, onTransitionEndFn );
 			}
@@ -264,9 +240,9 @@
 				}
 				instance[ options ].apply( instance, args );
 			});
-		}
+		} 
 		else {
-			this.each(function() {
+			this.each(function() {	
 				var instance = $.data( this, 'dlmenu' );
 				if ( instance ) {
 					instance._init();

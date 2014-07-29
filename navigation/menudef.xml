@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <template>Navigation.UL.cshtml</template>
+  <stylesheets>
+    <stylesheet>component.css</stylesheet>
+  </stylesheets>
+  <scripts>
+    <script>modernizr.custom.js</script><!--Modernizer Must Come First-->
+    <script>jquery.dlmenu.js</script>
+  </scripts>
+  <!--defaultTemplateArguments>
+    # Can't supply template arguments to razor templates (as of DDR 2.0.1)
+    <templateArgument name="CssClass" value="nav" />
+  </defaultTemplateArguments-->
+</manifest>

@@ -1,0 +1,52 @@
+@using DotNetNuke.Web.DDRMenu;
+@using System.Dynamic;
+@inherits DotNetNuke.Web.Razor.DotNetNukeWebPage<dynamic>
+@{ var root = Model.Source.root; }
+@helper RenderNodes(IEnumerable<MenuNode> nodes, int level)
+{
+    if (nodes.Any())
+    {
+        var dropdown = "";
+        if (level > 0) { dropdown = "dl-submenu"; }
+        if (level == 0) { dropdown = "dl-menu "; }
+
+        <ul class="@dropdown">
+            @{
+                foreach (var node in nodes)
+                {
+                    var classString = new List<string> { };
+                    var hrefString = new List<string> { };
+                    
+                    if (node.Selected) { classString.Add("dl-active"); }
+                    if (node.Enabled) { hrefString.Add(node.Url); } else { hrefString.Add("#"); }
+                    
+                    var classes = new HtmlString((classString.Count == 0) ? "" : (" class=\"" + string.Join(" ", classString) + "\""));
+                    var href = new HtmlString((hrefString.Count == 0) ? "" : (" href=\"" + string.Join(" ", hrefString) + "\""));
+                    
+                    <li @classes>
+                        @if (node.HasChildren()){
+                            <a @href target="@node.Target" class="dl-droplink">@node.Text</a>
+                            @RenderNodes(node.Children, level + 1)
+                        }
+                        else
+                        {
+                            <a @href target="@node.Target">@node.Text</a>
+                        }
+                    </li>
+                }
+            }
+        </ul>
+    }
+}
+<div id="dl-menu" class="dl-menuwrapper">
+    <button class="dl-trigger">Open Menu</button>
+    @RenderNodes(root.Children, 0)
+</div>
+<script>
+		$(function() {
+			$( '#dl-menu' ).dlmenu({
+				animationClasses : { classin : 'dl-animate-in-1', classout : 'dl-animate-out-1' }
+			});
+		});
+</script>
+
