@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+  <title>DNN-ResponsiveMultiLevelMenu</title>
+</head>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<body>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- DDRmenu v02.00.01 - navigation template -->
+      <div id="dl-menu" class="dl-menuwrapper">
+        <button class="dl-trigger">Open Menu</button>
+        <ul class="dl-menu ">
+          <li>
+                  <a href="http://tylersbuild.demo.dx1sites.com/" target="">Home</a>
+          </li>
+          <li class="dl-active">
+            <a href="http://tylersbuild.demo.dx1sites.com/models" target="" class="dl-droplink">Showroom</a>
+            <ul class="dl-submenu"><li class="dl-back"><a href="#">back</a></li>
+              <li>
+                      <a href="#" target="">New Inventory</a>
+              </li>
+              <li>
+                      <a href="#" target="">Used Inventory</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#" target="">Events</a>
+          </li>
+          <li>
+            <a href="#" target="" class="dl-droplink">Dealer Services</a>
+            <ul class="dl-submenu"><li class="dl-back"><a href="#">back</a></li>
+              <li>
+                <a href="#" target="">About Us</a>
+              </li>
+              <li>
+                <a href="#" target="">Service</a>
+              </li>
+              <li>
+                <a href="#" target="">Parts</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#" target="">Maps &amp; Hours</a>
+          </li>
+          <li>
+            <a href="#" target="">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+		$(function() {
+			$( '#dl-menu' ).dlmenu({
+				animationClasses : { classin : 'dl-animate-in-1', classout : 'dl-animate-out-1' }
+			});
+		});
+</script>
+</body>
+</html>
