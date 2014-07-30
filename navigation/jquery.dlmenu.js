@@ -13,17 +13,18 @@
 	'use strict';
 
 	// global
+	var breakpoint = 767;
 	var Modernizr = window.Modernizr, $body = $( 'body' );
-
-	$.DLMenu = function( options, element ) {
-		this.$el = $( element );
-		this._init(options);
-		$('.dl-droplink').click(function () {
-		    if ($(window).width() > 767) {
-		        var href = $(this).attr('href');
-		        window.location = href;
-		    }
-		});
+	var touch = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	$.DLMenu = function (options, element) {
+	    this.$el = $(element);
+	    this._init(options);
+	    $('.dl-droplink').click(function () {
+	        if ($(window).width() > breakpoint && !touch) {
+	            var href = $(this).attr('href');
+	            window.location = href;
+	        }
+	    });
 	};
 
 	// the options
