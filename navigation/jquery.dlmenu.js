@@ -13,18 +13,11 @@
 	'use strict';
 
 	// global
-	var breakpoint = 767;
 	var Modernizr = window.Modernizr, $body = $( 'body' );
 	var touch = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	$.DLMenu = function (options, element) {
 	    this.$el = $(element);
 	    this._init(options);
-	    $('.dl-droplink').click(function () {
-	        if ($(window).width() > breakpoint && !touch) {
-	            var href = $(this).attr('href');
-	            window.location = href;
-	        }
-	    });
 	};
 
 	// the options
@@ -36,7 +29,9 @@
 		onLevelClick : function( el, name ) { return false; },
 		// callback: click a link that does not have a sub menu
 		// el is the link element (li); ev is the event obj
-		onLinkClick : function( el, ev ) { return false; }
+		onLinkClick: function (el, ev) { return false; },
+	    //breakpoint in px for responsive design
+        breakpoint: '767'
 	};
 
 	$.DLMenu.prototype = {
@@ -73,15 +68,23 @@
 		},
 		_config : function() {
 			this.open = false;
-			this.$trigger = this.$el.children( '.dl-trigger' );
+			this.$trigger = this.$el.find( '.dl-trigger' );
 			this.$menu = this.$el.children( 'ul.dl-menu' );
 			this.$menuitems = this.$menu.find( 'li:not(.dl-back)' );
 			this.$el.find( 'ul.dl-submenu' ).prepend( '<li class="dl-back"><a href="#">back</a></li>' );
-			this.$back = this.$menu.find( 'li.dl-back' );
+			this.$back = this.$menu.find('li.dl-back');
+			this.$droplink = this.$menu.find('.dl-droplink');
 		},
 		_initEvents : function() {
 
 			var self = this;
+
+			this.$droplink.on('click.dlmenu', function () {
+			    if ($(window).width() > self.options.breakpoint && !touch) {
+			        var href = $(this).attr('href');
+			        window.location = href;
+			    }
+			});
 
 			this.$trigger.on( 'click.dlmenu', function() {
 				
