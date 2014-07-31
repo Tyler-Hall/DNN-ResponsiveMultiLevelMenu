@@ -38,14 +38,17 @@
         </ul>
     }
 }
-<div id="dl-menu" class="dl-menuwrapper">
-    <button class="dl-trigger">Open Menu</button>
-    @RenderNodes(root.Children, 0)
-</div>
+<nav id="dl-menu-container">
+    <div id="dl-menu" class="dl-menuwrapper">
+        <div class="dl-btn-wrap"><button class="dl-trigger"><span class="sr-only">Open Menu</span></button></div>
+        @RenderNodes(root.Children, 0)
+    </div>
+</nav>
 <script>
 		$(function() {
 			$( '#dl-menu' ).dlmenu({
-				animationClasses : { classin : 'dl-animate-in-1', classout : 'dl-animate-out-1' }
+			    animationClasses: { classin: 'dl-animate-in-2', classout: 'dl-animate-out-2' },
+                breakpoint: '767'
 			});
 		});
 </script>

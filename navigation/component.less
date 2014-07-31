@@ -1,12 +1,19 @@
 ﻿//The Options
-@menu-color:#049EBB;
-@link-color:#fff;
-@active-link-color:#fff;
-@active-link-bg-color:rgba(255,248,213,0.1);
-@active-link-decoration:none;
-@arrow-color:rgba(255,255,255,.5);
-@vertical-pos:5px;
-
+@use-font-awesome:false; //valid values: [true, false], false can be used for cleaner lines using css only, true is easier to manipulate
+@menu-trigger-icon:'\f0c9'; //unicode for icon, '\f0c9' is fa-bar, for use when @use-font-awesome = true
+@menu-trigger-color:#fff; //icon color
+@menu-trigger-icon-size:39px; //icon font size
+@menu-color:#049EBB; //background color for menu and submenus, default: #049EBB
+@link-color:#fff; //text color for menu and submenus, default: #FFF
+@active-link-color:#fff; // active link text color, default: #FFF
+@active-link-bg-color:rgba(255,248,213,0.1); //active link background color
+@active-link-decoration:none; //active link text-decoration, default: none, other example values: underline
+@arrow-color:rgba(255,255,255,.5); //dropdown and submenu dropdown indicator color
+@menu-alignment:left; //mobile: left or right
+@vertical-pos:5px; //mobile: margin between the trigger and the menu
+@mobile-menubar-color:@menu-color; //menu bar color default is color of the entire menu
+@mobile-menu-max-width:300px;//drop menu max width
+@menu-height:46px;//menu height in case you need to make a small adjustment
 //Arrow Mixins
 .arrow-reset{
     border:none;
@@ -46,18 +53,45 @@
 	border-bottom: @size solid transparent;
 	border-right:@size solid @color; 
 }
+//trigger mixins
 
+.trigger() when (@use-font-awesome = true){
+    content: @menu-trigger-icon;
+    font-family:FontAwesome;
+    color:@menu-trigger-color;
+    font-size:@menu-trigger-icon-size;
+    line-height:@menu-trigger-icon-size;
+}
+.trigger() when (@use-font-awesome = false){
+    content: '';
+    position: absolute;
+    width: 68%;
+    height: 5px;
+    background: #fff;
+    top: 10px;
+    left: 16%;
+    box-shadow: 
+	    0 10px 0 #fff, 
+	    0 20px 0 #fff;
+}
+.no-fa-width() when (@use-font-awesome = false){
+    width:48px;
+}
 // Menu Styles
+#dl-menu-container{
+    background-color:@mobile-menubar-color;
+    height:@menu-height;
+}
 .dl-menuwrapper {
 	width: 100%;
-	max-width: 300px;
-	float: left;
 	position: relative;
+    float:@menu-alignment;
 	-webkit-perspective: 1000px;
 	perspective: 1000px;
 	-webkit-perspective-origin: 50% 200%;
 	perspective-origin: 50% 200%;
     z-index:9999;
+    max-width: @mobile-menu-max-width;
     h1{
         margin:0;
         display:inline-block;
@@ -68,15 +102,18 @@
             color:@link-color!important;
         }
     }
-    &:first-child {
-	    margin-right: 100px;
+    .dl-btn-wrap{
+        text-align:@menu-alignment;
     }
     button {
 	    background: @menu-color ;
 	    border: none;
-	    width: 48px;
+        .no-fa-width();
 	    height: 45px;
-	    text-indent: -900em;
+        padding: 3px 8px;
+        .sr-only{
+            text-indent: -900em;
+        }
 	    overflow: hidden;
 	    position: relative;
 	    cursor: pointer;
@@ -85,16 +122,7 @@
 	        background: @menu-color;
         }
         &:after {
-	        content: '';
-	        position: absolute;
-	        width: 68%;
-	        height: 5px;
-	        background: #fff;
-	        top: 10px;
-	        left: 16%;
-	        box-shadow: 
-		        0 10px 0 #fff, 
-		        0 20px 0 #fff;
+	        .trigger();
         }
     }
     ul {
@@ -175,7 +203,7 @@
     > .dl-submenu {
 	    position: absolute;
 	    width: 100%;
-	    top: 50px + @vertical-pos;
+	    top: 51px + @vertical-pos;
 	    left: 0;
 	    margin: 0;
     }
@@ -221,7 +249,7 @@
         }
     }
 }
-
+//min-width should be equal to (var breakpoint + 1) in your jquery.dlmenu.js options (default breakpoint value: 767)
 @media(min-width:768px){
 
     .dl-menuwrapper {
@@ -239,7 +267,8 @@
         
             li{
                 position: relative;
-                display: table-cell;
+                display: inline-block;
+                margin-left:-3px;
                 .dl-submenu{
                     position: absolute;
                     width: 200px;
@@ -287,7 +316,7 @@
         }
     }
 }
-
+//max-width should be equal to var breakpoint in your jquery.dlmenu.js options (default breakpoint value: 767)
 @media(max-width:767px){
 // Animation classes for moving out and in
 
